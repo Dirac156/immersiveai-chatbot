@@ -1,5 +1,5 @@
 // Part 1: Chatbot Creation and UI
-(function loadChatbot() {
+(function () {
   // Step 1: Dynamically load Tailwind CSS from CDN
   const tailwindCDN = document.createElement("link");
   tailwindCDN.rel = "stylesheet";
