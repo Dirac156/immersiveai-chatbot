@@ -1,5 +1,5 @@
 // Part 1: Chatbot Creation and UI
-(function loadChatbot(projectId, workflowId) {
+(function loadChatbot() {
   // Step 1: Dynamically load Tailwind CSS from CDN
   const tailwindCDN = document.createElement("link");
   tailwindCDN.rel = "stylesheet";
@@ -36,8 +36,8 @@
   const scriptTag = document.currentScript;
 
   // Fetch org_id and api_key from the script tag's data attributes
-  const orgId = scriptTag.getAttribute("data-org-id");
-  const apiKey = scriptTag.getAttribute("data-api-key");
+  const projectId = scriptTag.getAttribute("data-project-id");
+  const workflowId = scriptTag.getAttribute("data-workflow-id");
 
   if (!orgId || !apiKey) {
     console.error("Chatbot requires 'org_id' and 'api_key' parameters.");
