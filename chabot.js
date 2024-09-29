@@ -89,6 +89,30 @@
   chatbotBody.style.height = "calc(100% - 50px)";
   chatbotBody.style.overflowY = "auto";
 
+  // Loader element (hidden by default)
+  const loader = document.createElement("div");
+  loader.classList.add("loader");
+  loader.style.display = "none"; // Initially hidden
+  loader.innerHTML = `
+    <div class="spinner"></div>
+    <style>
+      .spinner {
+        border: 4px solid rgba(0, 0, 0, 0.1);
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border-left-color: #22c55e;
+        animation: spin 1s ease infinite;
+      }
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  `;
+
+  chatbotBody.appendChild(loader);
+
   const chatbotFooter = document.createElement("div");
   chatbotFooter.style.padding = "10px";
   chatbotFooter.style.textAlign = "center";
@@ -135,7 +159,7 @@
   chatbotInputBox.appendChild(chatbotInput);
   chatbotInputBox.appendChild(chatbotInputBtn);
 
-  // Part 2: Chatbot Interactivity with Loading Indicator and Error Handling
+  // Part 2: Chatbot Interactivity with Loader
   chatbotInputBtn.addEventListener("click", function () {
     handleMessage();
   });
@@ -156,14 +180,13 @@
 
     chatbotInput.value = "";
 
-    // Show loading indicator
-    const loadingMessageBox = createMessageElement("Loading...", "loading");
-    chatbotBody.appendChild(loadingMessageBox);
+    // Show loader
+    loader.style.display = "flex"; // Show loader while API is being called
 
     // Send message to the server
     try {
       const response = await sendMessageToServer(userMessage);
-      chatbotBody.removeChild(loadingMessageBox); // Remove loading indicator
+      loader.style.display = "none"; // Hide loader when response is received
 
       const botMessageBox = createMessageElement(
         parseAIResponse(response),
@@ -171,7 +194,7 @@
       );
       chatbotBody.appendChild(botMessageBox);
     } catch (error) {
-      chatbotBody.removeChild(loadingMessageBox); // Remove loading indicator
+      loader.style.display = "none"; // Hide loader in case of error
       const errorMessageBox = createMessageElement(
         "Error: Failed to get a response from the server.",
         "error"
@@ -195,12 +218,9 @@
     } else if (type === "bot") {
       messageBox.style.backgroundColor = "#22c55e"; // Bot's response
       messageBox.style.color = "#fff";
-    } else if (type === "loading") {
-      messageBox.innerHTML = `<span>Loading...</span>`;
-      messageBox.style.backgroundColor = "#e0e0e0";
     } else if (type === "error") {
-      messageBox.innerHTML = `<span>${text}</span>`;
       messageBox.style.backgroundColor = "#ffcccc"; // Error message background
+      messageBox.innerText = text;
     }
 
     messageBox.innerText = text;
@@ -243,7 +263,6 @@
   }
 
   function parseAIResponse(response) {
-    // This regular expression captures the code block inside triple backticks
     const codeBlockRegex = /```[a-zA-Z]*\n([\s\S]*?)```/g;
     let formattedResponse = response;
 
@@ -251,10 +270,10 @@
       codeBlockRegex,
       function (match, code) {
         return `
-      <div class="code-container">
-        <button class="copy-btn">Copy</button>
-        <pre><code class="language-javascript">${code.trim()}</code></pre>
-      </div>`;
+        <div class="code-container">
+          <button class="copy-btn">Copy</button>
+          <pre><code class="language-javascript">${code.trim()}</code></pre>
+        </div>`;
       }
     );
 
