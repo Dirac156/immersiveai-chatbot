@@ -39,17 +39,17 @@
   const projectId = scriptTag.getAttribute("data-project-id");
   const workflowId = scriptTag.getAttribute("data-workflow-id");
 
-  if (!orgId || !apiKey) {
-    console.error("Chatbot requires 'org_id' and 'api_key' parameters.");
-    return;
-  }
+  // if (!orgId || !apiKey) {
+  //   console.error("Chatbot requires 'org_id' and 'api_key' parameters.");
+  //   return;
+  // }
 
-  console.log(
-    "Chatbot initialized with org_id:",
-    orgId,
-    "and api_key:",
-    apiKey
-  );
+  // console.log(
+  //   "Chatbot initialized with org_id:",
+  //   orgId,
+  //   "and api_key:",
+  //   apiKey
+  // );
 
   // Create chatbot button and container
   const chatbotBtn = document.createElement("button");
